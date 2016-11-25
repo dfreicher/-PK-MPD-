@@ -1,6 +1,4 @@
-package chart;
-
-import chart.Item;
+package pl.freicher.chart;
 
 import java.awt.Color;
 import java.awt.Dimension;

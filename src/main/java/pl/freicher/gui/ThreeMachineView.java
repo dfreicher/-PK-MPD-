@@ -1,24 +1,24 @@
-package gui;
+package pl.freicher.gui;
 
-import asset.Job;
-import chart.Item;
-import chart.TwoMachineChartComponent;
+import pl.freicher.asset.Job;
+import pl.freicher.chart.Item;
+import pl.freicher.chart.ThreeMachineChartComponent;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
 /**
  * @author Freicher
  * @version 1.0
  */
-public class TwoMachineView extends JFrame {
+public class ThreeMachineView extends JFrame {
 
 
-    public TwoMachineView() {
+    public ThreeMachineView() {
         initComponents();
     }
 
@@ -48,7 +48,7 @@ public class TwoMachineView extends JFrame {
         jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("System dwumaszynowy");
+        setTitle("System trójmaszynowy");
         setLocationByPlatform(true);
         setMaximumSize(new java.awt.Dimension(800, 600));
         setMinimumSize(new java.awt.Dimension(600, 400));
@@ -59,14 +59,14 @@ public class TwoMachineView extends JFrame {
 
             },
             new String [] {
-                "Numer zadania", "Maszyna 1 (czas wykonania)", "Maszyna 2 (czas wykonania)"
+                "Numer zadania", "Maszyna 1 (czas wykonania)", "Maszyna 2 (czas wykonania)", "Maszyna 3 (czas wykonania)"
             }
         ) {
             Class[] types = new Class [] {
-                Integer.class, Integer.class, Integer.class
+                Integer.class, Integer.class, Integer.class, Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true
+                false, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -271,7 +271,7 @@ public class TwoMachineView extends JFrame {
 
     private void addNewTask() {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
-        model.addRow(new Object[]{table.getRowCount() + 1, 0, 0});
+        model.addRow(new Object[]{table.getRowCount() + 1, 0, 0, 0});
     }
 
     private void clearTasks() {
@@ -291,7 +291,7 @@ public class TwoMachineView extends JFrame {
     private void randomValues() {
         Random generator = new Random();
         for (int i = table.getRowCount() - 1; i >= 0; i--) {
-            for (int y = 1; y <= 2; y++) {
+            for (int y = 1; y <= 3; y++) {
                 table.getModel().setValueAt(generator.nextInt(5) + 1, i, y);
             }
         }
@@ -310,21 +310,30 @@ public class TwoMachineView extends JFrame {
         List<Job> firstList = new ArrayList<>();
         List<Job> secondList = new ArrayList<>();
 
+        List<Integer> firstValuesList = new ArrayList<>();
+        List<Integer> secondValuesList = new ArrayList<>();
         
         for (int i = 0; i < table.getRowCount(); i++) {
 
             int firstMachineValue = (int) table.getModel().getValueAt(i, 1);
             int secondMachineValue = (int) table.getModel().getValueAt(i, 2);
+            int thirdMachineValue = (int) table.getModel().getValueAt(i, 3);
 
-            if (firstMachineValue <= secondMachineValue) {
-                firstList.add(new Job("Z" + (i + 1), firstMachineValue));
-            } else if (firstMachineValue > secondMachineValue) {
-                secondList.add(new Job("Z" + (i + 1), secondMachineValue));
+            firstValuesList.add(firstMachineValue + secondMachineValue);
+            secondValuesList.add(secondMachineValue + thirdMachineValue);
+        }
+
+        for (int i = 0; i < firstValuesList.size(); i++) {
+            if (firstValuesList.get(i) <= secondValuesList.get(i)) {
+                firstList.add(new Job("Z" + (i + 1), firstValuesList.get(i)));
+            } else if (firstValuesList.get(i) > secondValuesList.get(i)) {
+                secondList.add(new Job("Z" + (i + 1), secondValuesList.get(i)));
             }
         }
 
         Collections.sort(firstList);
         Collections.sort(secondList, Collections.reverseOrder());
+
         firstList.addAll(secondList);
 
         StringBuilder sb = new StringBuilder();
@@ -335,13 +344,17 @@ public class TwoMachineView extends JFrame {
 
         List<Item> firstMachineItems = new ArrayList<>();
         List<Item> secondMachineItems = new ArrayList<>();
+        List<Item> thirdMachineItems = new ArrayList<>();
 
         int current = 0;
+        int end = 0;
+        int start = 0;
         for (Job t : firstList) {
 
             String name = t.getName();
             int value = (int) table.getModel().getValueAt(Integer.parseInt(name.substring(1, name.length())) - 1, 1);
             int value2 = (int) table.getModel().getValueAt(Integer.parseInt(name.substring(1, name.length())) - 1, 2);
+            int value3 = (int) table.getModel().getValueAt(Integer.parseInt(name.substring(1, name.length())) - 1, 3);
 
             Item item = new Item(name, current, current + value);
             firstMachineItems.add(item);
@@ -349,13 +362,24 @@ public class TwoMachineView extends JFrame {
 
             Item item2 = new Item(name, current, current + value2);
             secondMachineItems.add(item2);
+
+            if (end > item2.getEnd()) {
+                start = end;
+            } else {
+                start = item2.getEnd();
+            }
+            Item item3 = new Item(name, start, start + value3);
+            thirdMachineItems.add(item3);
+            end = item3.getEnd();
         }
 
-        TwoMachineChartComponent chart = new TwoMachineChartComponent(firstMachineItems, secondMachineItems);
+        ThreeMachineChartComponent chart = new ThreeMachineChartComponent(firstMachineItems, secondMachineItems, thirdMachineItems);
         diagramPanel.removeAll();
         diagramPanel.add(chart);
 
+
         cmaxLabel.setText(chart.getMaxX() + "");
+   
     }
 
     public boolean isTableJobsEmpty() {
@@ -376,19 +400,19 @@ public class TwoMachineView extends JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TwoMachineView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ThreeMachineView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TwoMachineView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ThreeMachineView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TwoMachineView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ThreeMachineView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TwoMachineView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ThreeMachineView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                JFrame frame = new TwoMachineView();
+                JFrame frame = new ThreeMachineView();
                 frame.setVisible(true);
 
             }

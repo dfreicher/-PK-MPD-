@@ -1,4 +1,4 @@
-package chart;
+package pl.freicher.chart;
 
 public class Item {
     

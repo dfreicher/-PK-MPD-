@@ -1,6 +1,6 @@
-package gui;
+package pl.freicher.gui;
 
-import asset.Job;
+import pl.freicher.asset.Job;
 import org.junit.After;
 import org.junit.Test;
 

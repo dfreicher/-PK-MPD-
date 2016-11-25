@@ -1,4 +1,4 @@
-package asset;
+package pl.freicher.asset;
 
 /**
  * @author Freicher
