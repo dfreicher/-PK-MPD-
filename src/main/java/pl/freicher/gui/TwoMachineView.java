@@ -307,8 +307,8 @@ public class TwoMachineView extends JFrame {
     }
 
     private void calculate() {
-        List<Job> firstList = new ArrayList<>();
-        List<Job> secondList = new ArrayList<>();
+        List<Job> firstList = new ArrayList<Job>();
+        List<Job> secondList = new ArrayList<Job>();
 
         
         for (int i = 0; i < table.getRowCount(); i++) {
@@ -333,8 +333,8 @@ public class TwoMachineView extends JFrame {
         }
         resultLabel.setText(sb.toString());
 
-        List<Item> firstMachineItems = new ArrayList<>();
-        List<Item> secondMachineItems = new ArrayList<>();
+        List<Item> firstMachineItems = new ArrayList<Item>();
+        List<Item> secondMachineItems = new ArrayList<Item>();
 
         int current = 0;
         for (Job t : firstList) {

@@ -307,11 +307,11 @@ public class ThreeMachineView extends JFrame {
     }
 
     private void calculate() {
-        List<Job> firstList = new ArrayList<>();
-        List<Job> secondList = new ArrayList<>();
+        List<Job> firstList = new ArrayList<Job>();
+        List<Job> secondList = new ArrayList<Job>();
 
-        List<Integer> firstValuesList = new ArrayList<>();
-        List<Integer> secondValuesList = new ArrayList<>();
+        List<Integer> firstValuesList = new ArrayList<Integer>();
+        List<Integer> secondValuesList = new ArrayList<Integer>();
         
         for (int i = 0; i < table.getRowCount(); i++) {
 
@@ -342,9 +342,9 @@ public class ThreeMachineView extends JFrame {
         }
         resultLabel.setText(sb.toString());
 
-        List<Item> firstMachineItems = new ArrayList<>();
-        List<Item> secondMachineItems = new ArrayList<>();
-        List<Item> thirdMachineItems = new ArrayList<>();
+        List<Item> firstMachineItems = new ArrayList<Item>();
+        List<Item> secondMachineItems = new ArrayList<Item>();
+        List<Item> thirdMachineItems = new ArrayList<Item>();
 
         int current = 0;
         int end = 0;

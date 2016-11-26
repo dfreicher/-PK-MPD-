@@ -18,8 +18,8 @@ import javax.swing.Scrollable;
 public class TwoMachineChartComponent extends JComponent implements Scrollable {
     
     private int SQUARE_WIDTH = 25;
-    private List<Item> first = new ArrayList<>();
-    private List<Item> second = new ArrayList<>();
+    private List<Item> first = new ArrayList<Item>();
+    private List<Item> second = new ArrayList<Item>();
 
     public TwoMachineChartComponent(List<Item> first, List<Item> second) {
         this.first = first;

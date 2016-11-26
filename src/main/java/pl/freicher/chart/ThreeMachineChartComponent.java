@@ -13,9 +13,9 @@ import java.util.Random;
 public class ThreeMachineChartComponent extends JComponent implements Scrollable {
 
     private int SQUARE_WIDTH = 25;
-    private List<Item> first = new ArrayList<>();
-    private List<Item> second = new ArrayList<>();
-    private List<Item> third = new ArrayList<>();
+    private List<Item> first = new ArrayList<Item>();
+    private List<Item> second = new ArrayList<Item>();
+    private List<Item> third = new ArrayList<Item>();
 
     public ThreeMachineChartComponent(List<Item> first, List<Item> second, List<Item> third) {
         this.first = first;
